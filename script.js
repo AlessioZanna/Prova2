@@ -10,11 +10,11 @@ function toggleBackupMenu() {
 
 // Funzione per scaricare il backup (serializza e salva i dati in un file)
 function downloadBackup() {
-    const contacts = getContacts(); // Funzione che raccoglie i contatti da salvare (definita separatamente)
-    const dataStr = JSON.stringify(contacts); // Converti i dati in formato JSON
+    const chats = getChats(); // Ottiene tutte le chat
+    const dataStr = JSON.stringify(chats); // Converte i dati in formato JSON
 
-    const blob = new Blob([dataStr], { type: "application/json" }); // Crea un oggetto Blob per il file
-    const url = URL.createObjectURL(blob); // Crea un URL per il file
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
 
     const a = document.createElement("a");
     a.href = url;
@@ -22,10 +22,10 @@ function downloadBackup() {
     document.body.appendChild(a);
     a.click(); // Avvia il download
     document.body.removeChild(a);
-    URL.revokeObjectURL(url); // Rimuovi l'oggetto URL
+    URL.revokeObjectURL(url);
 }
 
-// Funzione per caricare un backup (leggi il file JSON e ripristina i dati)
+// Funzione per caricare un backup (legge il file JSON e ripristina i dati)
 function uploadBackup() {
     const input = document.createElement("input");
     input.type = "file";
@@ -33,11 +33,12 @@ function uploadBackup() {
     input.onchange = function (event) {
         const file = event.target.files[0];
         const reader = new FileReader();
-        
+
         reader.onload = function (e) {
             const data = JSON.parse(e.target.result); // Parsea il contenuto del file JSON
-            setContacts(data); // Funzione che aggiorna i contatti nell'app (definita separatamente)
+            setChats(data); // Funzione che aggiorna le chat nell'app
             alert("Backup caricato con successo!");
+            renderChats(); // Rende visibile la lista aggiornata delle chat
         };
 
         reader.onerror = function () {
@@ -50,28 +51,83 @@ function uploadBackup() {
     input.click(); // Clicca per aprire il selettore di file
 }
 
-// Funzione per cancellare i dati (rimuove tutti i contatti)
+// Funzione per cancellare i dati (rimuove tutte le chat)
 function deleteData() {
     if (confirm("Sei sicuro di voler cancellare tutti i dati?")) {
-        localStorage.removeItem("contacts"); // Rimuovi i contatti dal localStorage
+        localStorage.removeItem("chats"); // Rimuovi le chat dal localStorage
         alert("Dati cancellati con successo.");
+        renderChats(); // Rende visibile la lista vuota delle chat
     }
 }
 
-// Funzione per ottenere i contatti dal localStorage (se esistono)
-function getContacts() {
-    const contactsData = localStorage.getItem("contacts");
-    return contactsData ? JSON.parse(contactsData) : [];
+// Funzione per ottenere le chat dal localStorage
+function getChats() {
+    const chatsData = localStorage.getItem("chats");
+    return chatsData ? JSON.parse(chatsData) : [];
 }
 
-// Funzione per salvare i contatti nel localStorage
-function setContacts(contacts) {
-    localStorage.setItem("contacts", JSON.stringify(contacts));
+// Funzione per salvare le chat nel localStorage
+function setChats(chats) {
+    localStorage.setItem("chats", JSON.stringify(chats));
 }
 
 // Funzione per creare una nuova chat
 function createNewChat() {
-    alert("Funzione di creazione chat ancora da implementare.");
+    const chatName = prompt("Inserisci il nome della nuova chat:");
+    if (chatName) {
+        const newChat = {
+            name: chatName,
+            messages: []
+        };
+        const chats = getChats();
+        chats.push(newChat);
+        setChats(chats);
+        renderChats(); // Rende visibile la lista aggiornata delle chat
+    }
+}
+
+// Funzione per renderizzare le chat nella home page
+function renderChats() {
+    const chatList = document.getElementById("chat-list");
+    chatList.innerHTML = ""; // Pulisce la lista delle chat esistenti
+    const chats = getChats();
+    
+    chats.forEach((chat, index) => {
+        const chatItem = document.createElement("div");
+        chatItem.className = "chat-item";
+        chatItem.textContent = chat.name;
+        chatItem.onclick = function() {
+            openChat(index); // Apre la chat selezionata
+        };
+        chatList.appendChild(chatItem);
+    });
+}
+
+// Funzione per aprire una chat specifica
+function openChat(index) {
+    const chats = getChats();
+    const selectedChat = chats[index];
+
+    // Mostra la pagina della chat e nasconde la home
+    document.getElementById("home-page").style.display = "none";
+    document.getElementById("chat-page").style.display = "block";
+    document.getElementById("chat-name").textContent = selectedChat.name;
+
+    // Carica i messaggi nella chat
+    const chatBox = document.getElementById("chat-box");
+    chatBox.innerHTML = ""; // Pulisce i messaggi esistenti
+
+    selectedChat.messages.forEach(msg => {
+        const messageDiv = document.createElement("div");
+        messageDiv.className = "message";
+        messageDiv.textContent = msg;
+        chatBox.appendChild(messageDiv);
+    });
+
+    // Funzione di invio messaggio
+    document.getElementById("send-message").onclick = function() {
+        sendMessage(index);
+    };
 }
 
 // Funzione per tornare alla home page
@@ -81,20 +137,47 @@ function goBack() {
 }
 
 // Funzione per inviare un messaggio di testo
-function sendMessage() {
+function sendMessage(chatIndex) {
     const messageInput = document.getElementById("message");
     const messageText = messageInput.value;
+
     if (messageText) {
+        const chats = getChats();
+        chats[chatIndex].messages.push(messageText); // Aggiungi il messaggio alla chat
+        setChats(chats); // Salva i dati delle chat
+
+        // Aggiungi il messaggio nella visualizzazione
         const chatBox = document.getElementById("chat-box");
-        const message = document.createElement("div");
-        message.className = "message user";
-        message.innerHTML = `<div class="msg">${messageText}</div>`;
-        chatBox.appendChild(message);
+        const messageDiv = document.createElement("div");
+        messageDiv.className = "message user";
+        messageDiv.textContent = messageText;
+        chatBox.appendChild(messageDiv);
+
         messageInput.value = ""; // Pulisce il campo di input
     }
 }
 
-// Funzione per inviare un messaggio vocale
-function sendAudio() {
-    alert("Funzione di invio audio ancora da implementare.");
+// Funzione per cercare una chat
+function searchChat() {
+    const searchInput = document.getElementById("search-input").value.toLowerCase();
+    const chats = getChats();
+    const filteredChats = chats.filter(chat => chat.name.toLowerCase().includes(searchInput));
+    
+    const chatList = document.getElementById("chat-list");
+    chatList.innerHTML = ""; // Pulisce la lista delle chat
+
+    filteredChats.forEach((chat, index) => {
+        const chatItem = document.createElement("div");
+        chatItem.className = "chat-item";
+        chatItem.textContent = chat.name;
+        chatItem.onclick = function() {
+            openChat(index); // Apre la chat selezionata
+        };
+        chatList.appendChild(chatItem);
+    });
 }
+
+// Inizializzazione della home page con le chat salvate
+document.addEventListener("DOMContentLoaded", function() {
+    renderChats(); // Carica le chat all'avvio
+});
