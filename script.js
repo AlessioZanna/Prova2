@@ -1,155 +1,52 @@
-let chats = JSON.parse(localStorage.getItem("chats")) || [];
-let currentChatIndex = null;
-let startX = 0;
-let currentSwipedChat = null;
-
-function saveChats() {
-    localStorage.setItem("chats", JSON.stringify(chats));
-}
-
-function goBack() {
-    document.getElementById("chat-page").style.display = "none";
-    document.getElementById("home-page").style.display = "flex";
-    currentChatIndex = null;
-}
-
-function createNewChat() {
-    const chatName = prompt("Inserisci il nome della chat:");
-    if (chatName && chatName.trim() !== "") {
-        chats.push({ name: chatName.trim(), messages: [] });
-        saveChats();
-        renderChats();
-    }
-}
-
-function renderChats() {
-    const contactList = document.getElementById("contact-list");
-    contactList.innerHTML = "";
-    const searchQuery = document.getElementById("search-input").value.toLowerCase();
-
-    chats.filter(chat => chat.name.toLowerCase().includes(searchQuery)).forEach((chat, index) => {
-        const contactItem = document.createElement("div");
-        contactItem.classList.add("contact");
-        contactItem.innerHTML = `
-            <div class="contact-info">
-                <h3>${chat.name}</h3>
-                <p>${chat.messages.length > 0 ? chat.messages[chat.messages.length - 1].text : "Nessun messaggio"}</p>
-            </div>
-            <div class="contact-delete" onclick="deleteChat(${index})">✖</div>
-        `;
-
-        // Gestione dello swipe
-        contactItem.addEventListener("touchstart", e => {
-            startX = e.touches[0].clientX;
-        });
-
-        contactItem.addEventListener("touchmove", e => {
-            const touchX = e.touches[0].clientX;
-            const distance = touchX - startX;
-
-            if (distance < -50) { // Swipe sinistra
-                if (currentSwipedChat && currentSwipedChat !== contactItem) {
-                    currentSwipedChat.classList.remove("swiped");
-                }
-                contactItem.classList.add("swiped");
-                currentSwipedChat = contactItem;
-            } else if (distance > 50) { // Swipe destra
-                contactItem.classList.remove("swiped");
-                if (currentSwipedChat === contactItem) {
-                    currentSwipedChat = null;
-                }
-            }
-        });
-
-        contactItem.addEventListener("touchend", () => {
-            if (!contactItem.classList.contains("swiped")) {
-                currentSwipedChat = null;
-            }
-        });
-
-        contactItem.addEventListener("click", () => openChat(index));
-        contactList.appendChild(contactItem);
-    });
-}
-
-function openChat(index) {
-    currentChatIndex = index;
-    const chat = chats[index];
-    document.getElementById("chat-user").innerText = chat.name;
-    const chatBox = document.getElementById("chat-box");
-    chatBox.innerHTML = "";
-    chat.messages.forEach(message => {
-        const messageDiv = document.createElement("div");
-        messageDiv.classList.add("message", message.type);
-        messageDiv.innerHTML = `<div class="msg">${message.text}</div>`;
-        chatBox.appendChild(messageDiv);
-    });
-    document.getElementById("chat-page").style.display = "flex";
-    document.getElementById("home-page").style.display = "none";
-}
-
-function sendMessage() {
-    const input = document.getElementById("message");
-    if (input.value.trim() !== "" && currentChatIndex !== null) {
-        chats[currentChatIndex].messages.push({ type: "user", text: input.value.trim() });
-        saveChats();
-        input.value = "";
-        openChat(currentChatIndex);
-    }
-}
-
-function sendAudio() {
-    if (currentChatIndex !== null) {
-        chats[currentChatIndex].messages.push({ type: "audio", text: "Audio inviato." });
-        saveChats();
-        openChat(currentChatIndex);
-    }
-}
-
-function deleteChat(index) {
-    if (confirm("Sei sicuro di voler eliminare questa chat?")) {
-        chats.splice(index, 1);
-        saveChats();
-        goBack(); // Torna alla home page dopo l'eliminazione
-        renderChats();
-    }
-}
-
-document.getElementById("search-input").addEventListener("input", renderChats);
-renderChats();
-
-
-
-
-// Funzione per mostrare/nascondere il menu
+// Funzione per aprire e chiudere il menu a discesa del backup
 function toggleBackupMenu() {
     const menu = document.getElementById("backup-menu");
-    menu.style.display = (menu.style.display === "block") ? "none" : "block";
-}
-
-// Funzione per scaricare il backup
-function downloadBackup() {
-    const backupData = JSON.stringify(chats);
-    const blob = new Blob([backupData], { type: "application/json" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "backup_chats.json";
-    link.click();
-    toggleBackupMenu(); // Nascondi il menu dopo l'azione
-}
-
-// Funzione per caricare il backup (simulato)
-function uploadBackup() {
-    alert("Caricamento del backup non implementato.");
-    toggleBackupMenu(); // Nascondi il menu dopo l'azione
-}
-
-// Funzione per cancellare i dati (le chat)
-function deleteData() {
-    if (confirm("Sei sicuro di voler cancellare tutte le chat?")) {
-        chats = [];  // Resetta le chat
-        saveChats(); // Salva i dati vuoti
-        renderChats(); // Rende l'elenco delle chat aggiornato
+    if (menu.style.display === "block") {
+        menu.style.display = "none"; // Nasconde il menu
+    } else {
+        menu.style.display = "block"; // Mostra il menu
     }
-    toggleBackupMenu(); // Nascondi il menu dopo l'azione
+}
+
+// Funzioni di backup
+function downloadBackup() {
+    alert("Funzione di download backup ancora da implementare.");
+}
+
+function uploadBackup() {
+    alert("Funzione di upload backup ancora da implementare.");
+}
+
+function deleteData() {
+    alert("Funzione di cancellazione dei dati ancora da implementare.");
+}
+
+// Funzione per creare una nuova chat
+function createNewChat() {
+    alert("Funzione di creazione chat ancora da implementare.");
+}
+
+// Funzione per tornare alla home page
+function goBack() {
+    document.getElementById("home-page").style.display = "block";
+    document.getElementById("chat-page").style.display = "none";
+}
+
+// Funzione per inviare un messaggio di testo
+function sendMessage() {
+    const messageInput = document.getElementById("message");
+    const messageText = messageInput.value;
+    if (messageText) {
+        const chatBox = document.getElementById("chat-box");
+        const message = document.createElement("div");
+        message.className = "message user";
+        message.innerHTML = `<div class="msg">${messageText}</div>`;
+        chatBox.appendChild(message);
+        messageInput.value = ""; // Pulisce il campo di input
+    }
+}
+
+// Funzione per inviare un messaggio vocale
+function sendAudio() {
+    alert("Funzione di invio audio ancora da implementare.");
 }
