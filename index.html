@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Notes</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <div id="home-page">
+        <div id="sidebar">
+            <!-- Pulsante per il backup -->
+            <div class="button" id="backup-menu-btn" style="background-color: #ff4d4d;">Backup</div>
+            <div class="dropdown" id="backup-menu">
+                <div class="button" id="backup-download">Scarica Backup</div>
+                <input type="file" id="backup-upload" class="file-input">
+                <div class="button" id="backup-delete" style="background-color: red;">Cancella Dati</div>
+            </div>
+        </div>
+
+        <div id="contact-list"></div>
+        <input type="text" id="search-input" placeholder="Cerca chat...">
+        <div class="button" id="create-chat-btn">Crea chat</div>
+    </div>
+
+    <div id="chat-page" style="display: none;">
+        <div id="chat-user"></div>
+        <div id="chat-box"></div>
+        <input type="text" id="message" placeholder="Scrivi un messaggio">
+        <div class="button" id="send-btn" onclick="sendMessage()">Invia</div>
+        <div class="button" id="send-audio-btn" onclick="sendAudio()">Invia audio</div>
+        <div class="button" id="back-btn" onclick="goBack()">Indietro</div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
