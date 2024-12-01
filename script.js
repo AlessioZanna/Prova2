@@ -117,3 +117,39 @@ function deleteChat(index) {
 
 document.getElementById("search-input").addEventListener("input", renderChats);
 renderChats();
+
+
+
+
+// Funzione per mostrare/nascondere il menu
+function toggleBackupMenu() {
+    const menu = document.getElementById("backup-menu");
+    menu.style.display = (menu.style.display === "block") ? "none" : "block";
+}
+
+// Funzione per scaricare il backup
+function downloadBackup() {
+    const backupData = JSON.stringify(chats);
+    const blob = new Blob([backupData], { type: "application/json" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "backup_chats.json";
+    link.click();
+    toggleBackupMenu(); // Nascondi il menu dopo l'azione
+}
+
+// Funzione per caricare il backup (simulato)
+function uploadBackup() {
+    alert("Caricamento del backup non implementato.");
+    toggleBackupMenu(); // Nascondi il menu dopo l'azione
+}
+
+// Funzione per cancellare i dati (le chat)
+function deleteData() {
+    if (confirm("Sei sicuro di voler cancellare tutte le chat?")) {
+        chats = [];  // Resetta le chat
+        saveChats(); // Salva i dati vuoti
+        renderChats(); // Rende l'elenco delle chat aggiornato
+    }
+    toggleBackupMenu(); // Nascondi il menu dopo l'azione
+}
