@@ -1,9 +1,16 @@
 let chats = JSON.parse(localStorage.getItem("chats")) || [];
 let currentChatIndex = null;
+let startX = 0;
+let currentSwipedChat = null;
 
 function saveChats() {
-    console.log("Salvataggio delle chat:", chats);
     localStorage.setItem("chats", JSON.stringify(chats));
+}
+
+function goBack() {
+    document.getElementById("chat-page").style.display = "none";
+    document.getElementById("home-page").style.display = "flex";
+    currentChatIndex = null;
 }
 
 function createNewChat() {
@@ -30,6 +37,35 @@ function renderChats() {
             </div>
             <div class="contact-delete" onclick="deleteChat(${index})">✖</div>
         `;
+
+        // Gestione dello swipe
+        contactItem.addEventListener("touchstart", e => {
+            startX = e.touches[0].clientX;
+        });
+
+        contactItem.addEventListener("touchmove", e => {
+            const touchX = e.touches[0].clientX;
+            const distance = touchX - startX;
+
+            if (distance < -50) { // Swipe sinistra
+                if (currentSwipedChat && currentSwipedChat !== contactItem) {
+                    currentSwipedChat.classList.remove("swiped");
+                }
+                contactItem.classList.add("swiped");
+                currentSwipedChat = contactItem;
+            } else if (distance > 50) { // Swipe destra
+                contactItem.classList.remove("swiped");
+                if (currentSwipedChat === contactItem) {
+                    currentSwipedChat = null;
+                }
+            }
+        });
+
+        contactItem.addEventListener("touchend", () => {
+            if (!contactItem.classList.contains("swiped")) {
+                currentSwipedChat = null;
+            }
+        });
 
         contactItem.addEventListener("click", () => openChat(index));
         contactList.appendChild(contactItem);
@@ -74,54 +110,10 @@ function deleteChat(index) {
     if (confirm("Sei sicuro di voler eliminare questa chat?")) {
         chats.splice(index, 1);
         saveChats();
+        goBack(); // Torna alla home page dopo l'eliminazione
         renderChats();
     }
 }
 
-function downloadBackup() {
-    const blob = new Blob([JSON.stringify(chats)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "backup_chats.json";
-    link.click();
-    URL.revokeObjectURL(url);
-}
-
-function uploadBackup(event) {
-    const file = event.target.files[0];
-    if (file && file.type === "application/json") {
-        const reader = new FileReader();
-        reader.onload = function () {
-            try {
-                const uploadedChats = JSON.parse(reader.result);
-                chats = uploadedChats;
-                saveChats();
-                renderChats();
-                alert("Backup caricato con successo!");
-            } catch (error) {
-                alert("Errore nel caricamento del backup.");
-            }
-        };
-        reader.readAsText(file);
-    } else {
-        alert("Seleziona un file JSON valido.");
-    }
-}
-
-function deleteAllChats() {
-    if (confirm("Sei sicuro di voler cancellare tutte le chat?")) {
-        chats = [];
-        saveChats();
-        renderChats();
-        alert("Tutte le chat sono state cancellate.");
-    }
-}
-
-document.getElementById("backup-download").addEventListener("click", downloadBackup);
-document.getElementById("backup-upload").addEventListener("change", uploadBackup);
-document.getElementById("backup-delete").addEventListener("click", deleteAllChats);
-document.getElementById("create-chat-btn").addEventListener("click", createNewChat);
 document.getElementById("search-input").addEventListener("input", renderChats);
-
 renderChats();
