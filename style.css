@@ -239,16 +239,11 @@ body {
     cursor: pointer;
 }
 
-
 /* Menu di backup a sinistra */
 .backup-button-container {
     position: fixed;
     left: 20px;
     bottom: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #f1f50c;
 }
 
 .backup-button {
@@ -256,7 +251,7 @@ body {
     height: 60px;
     border-radius: 50%;
     font-size: 32px;
-    background-color: #007bff;
+    background-color: #ec404f;
     color: white;
     display: flex;
     justify-content: center;
@@ -265,7 +260,6 @@ body {
     cursor: pointer;
 }
 
-/* Menu a discesa (nascosto di default) */
 .backup-menu {
     display: none;
     background-color: #1c1c1c;
@@ -273,31 +267,23 @@ body {
     padding: 10px;
     margin-top: 10px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    position: absolute;
+    bottom: 80px;
+    left: 0;
 }
 
 .backup-menu ul {
-    list-style-type: none;
+    list-style: none;
     padding: 0;
     margin: 0;
 }
 
-.backup-menu ul li {
+.backup-menu li {
     padding: 10px;
     cursor: pointer;
     color: white;
-    font-size: 14px;
 }
 
-.backup-menu ul li:hover {
+.backup-menu li:hover {
     background-color: #333;
 }
-
-.delete-data {
-    color: #ec404f;
-}
-
-.delete-data:hover {
-    background-color: #ff6b6b;
-}
-
-
