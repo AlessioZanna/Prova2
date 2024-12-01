@@ -21,23 +21,20 @@
         </div>
         <div class="contact-list" id="contact-list">
 
+            <!-- Pulsante di backup a sinistra -->
+            <div class="backup-button-container">
+                <button class="backup-button" onclick="toggleBackupMenu()">🔧</button>
 
-<!-- Pulsante di backup a sinistra -->
-<div class="backup-button-container">
-  <button class="backup-button" onclick="toggleBackupMenu()">🔧</button>
+                <!-- Menu a discesa (di default nascosto) -->
+                <div id="backup-menu" class="backup-menu">
+                    <ul>
+                        <li onclick="downloadBackup()">Scarica Backup</li>
+                        <li onclick="uploadBackup()">Carica Backup</li>
+                        <li onclick="deleteData()" class="delete-data">Cancella Dati</li>
+                    </ul>
+                </div>
+            </div>
 
-  <!-- Menu a discesa (di default nascosto) -->
-  <div id="backup-menu" class="backup-menu">
-    <ul>
-      <li onclick="downloadBackup()">Scarica Backup</li>
-      <li onclick="uploadBackup()">Carica Backup</li>
-      <li onclick="deleteData()" class="delete-data">Cancella Dati</li>
-    </ul>
-  </div>
-</div>
-
-
-            
             <!-- Lista di chat (creata dinamicamente) -->
         </div>
         <button class="create-chat-button" onclick="createNewChat()">+</button>
