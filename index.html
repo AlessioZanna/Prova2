@@ -2,35 +2,43 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Music Notes</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="icon-192.png" sizes="192x192">
+    <link rel="icon" href="icon-512.png" sizes="512x512">
 </head>
 <body>
-    <div id="home-page">
-        <div id="sidebar">
-            <!-- Pulsante per il backup -->
-            <div class="button" id="backup-menu-btn" style="background-color: #ff4d4d;">Backup</div>
-            <div class="dropdown" id="backup-menu">
-                <div class="button" id="backup-download">Scarica Backup</div>
-                <input type="file" id="backup-upload" class="file-input">
-                <div class="button" id="backup-delete" style="background-color: red;">Cancella Dati</div>
-            </div>
+    <!-- Home Page -->
+    <div id="home-page" class="home-page">
+        <div class="header">
+            <h2>Music Notes</h2>
         </div>
-
-        <div id="contact-list"></div>
-        <input type="text" id="search-input" placeholder="Cerca chat...">
-        <div class="button" id="create-chat-btn">Crea chat</div>
+        <div class="search-bar">
+            <input type="text" placeholder="Cerca musica..." id="search-input">
+        </div>
+        <div class="contact-list" id="contact-list">
+            <!-- Lista di chat (creata dinamicamente) -->
+        </div>
+        <button class="create-chat-button" onclick="createNewChat()">+</button>
     </div>
 
-    <div id="chat-page" style="display: none;">
-        <div id="chat-user"></div>
-        <div id="chat-box"></div>
-        <input type="text" id="message" placeholder="Scrivi un messaggio">
-        <div class="button" id="send-btn" onclick="sendMessage()">Invia</div>
-        <div class="button" id="send-audio-btn" onclick="sendAudio()">Invia audio</div>
-        <div class="button" id="back-btn" onclick="goBack()">Indietro</div>
+    <!-- Chat Page -->
+    <div id="chat-page" class="chat-container" style="display: none;">
+        <div class="header chat-header">
+            <button onclick="goBack()" class="back-button">←</button>
+            <h2 id="chat-user"></h2>
+        </div>
+        <div class="chat-box" id="chat-box">
+            <!-- I messaggi appariranno qui -->
+        </div>
+        <div class="message-input">
+            <input type="text" id="message" placeholder="Scrivi qui..." />
+            <button onclick="sendMessage()" class="send-button">📤</button>
+            <button onclick="sendAudio()" class="audio-button">🎤</button>
+        </div>
     </div>
 
     <script src="script.js"></script>
