@@ -238,3 +238,65 @@ body {
     font-size: 16px;
     cursor: pointer;
 }
+
+
+/* Menu di backup a sinistra */
+.backup-button-container {
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.backup-button {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    font-size: 32px;
+    background-color: #007bff;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+}
+
+/* Menu a discesa (nascosto di default) */
+.backup-menu {
+    display: none;
+    background-color: #1c1c1c;
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.backup-menu ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.backup-menu ul li {
+    padding: 10px;
+    cursor: pointer;
+    color: white;
+    font-size: 14px;
+}
+
+.backup-menu ul li:hover {
+    background-color: #333;
+}
+
+.delete-data {
+    color: #ec404f;
+}
+
+.delete-data:hover {
+    background-color: #ff6b6b;
+}
+
+
