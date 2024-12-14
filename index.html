@@ -1,9 +1,10 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="theme-color" content="#ffffff">
     <title>Music Notes</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
@@ -11,42 +12,95 @@
     <link rel="icon" href="icon-512.png" sizes="512x512">
 </head>
 <body>
+
+
+
+
+
+
     <!-- Home Page -->
     <div id="home-page" class="home-page">
         <div class="header">
-            <h2 class="titolo">Music Notes</h2>
-            <button class="menu-button" onclick="toggleMenu()">☰</button>
+            <h2>Music Notes</h2>
+            <div id="menu-icon" class="menu-icon" onclick="openHomeMenu()">☰</div>
         </div>
+        <!-- Aggiungi questo codice all'interno della home page, nella sezione dove visualizzi le chat -->
         <div class="search-bar">
-            <input type="text" placeholder="Cerca musica..." id="search-input">
+            <input type="text" id="search-input" placeholder="Cerca musica.." oninput="renderChats()">
         </div>
+
         <div class="contact-list" id="contact-list">
             <!-- Lista di chat (creata dinamicamente) -->
         </div>
-        <button class="create-chat-button" onclick="createNewChat()">+</button>
+        <button class="create-chat-button" onclick="createNewChat()" aria-label="Crea nuova chat">+</button>
+
+
+
+
+        <!-- Menu che si aprirà a destra -->
+    <div id="right-page" class="right-page" style="display: none;">
+        <div id="right-page-content">
+            <h2>Menu</h2>
+            <h3 class="option1">HeatMap Calendar</h3>
+            <h3 class="option2">Backup</h3>
+            <button onclick="closeHomeMenu()">Chiudi</button>
+        </div>
+    </div>
+
+
+    <!-- Aggiungi un overlay che copre la home page quando il menu è aperto -->
+<div id="home-overlay" class="home-overlay" style="display: none;" onclick="closeHomeMenu()"></div>
+
+
+
+
+
     </div>
 
     <!-- Chat Page -->
-    <div id="chat-page" class="chat-container" style="display: none;">
-        <div class="header chat-header">
-            <button onclick="goBack()" class="back-button">←</button>
-            <h2 id="chat-user"></h2>
+<div id="chat-page" class="chat-container" style="display: none;">
+    <div class="header chat-header">
+        <button onclick="goBack()" class="back-button">←</button>
+        <h2 id="chat-user"></h2>
+        <div id="menu-icon" class="menu-icon" onclick="openChatMenu()">☰</div>
+    </div>
+    <div class="chat-box" id="chat-box">
+        <!-- I messaggi appariranno qui -->
+    </div>
+    <div class="message-input">
+        <input type="text" id="message" placeholder="Scrivi qui..." />
+        <button onclick="sendMessage()" class="send-button">📤</button>
+        <button onclick="sendAudio()" class="audio-button">🎤</button>
+    </div>
+</div>
+
+
+
+<!-- Chat Menu -->
+<div id="settings-page" class="settings-page" style="display: none;">
+    <div class="header settings-header">
+        <button onclick="goBackFromSettings()" class="back-button">←</button>
+        <h2>Opzioni</h2>
+    </div>
+    <div class="settings-content">
+        <div class="white-square"></div>
+
+        
+        <div class="buttons-container1">
+            <button class="settings-button" onclick="optionOne()">Opz1</button>
+            <button class="settings-button" onclick="optionTwo()">Opz2</button>
+            <button class="settings-button" onclick="optionThree()">Opz3</button>
         </div>
-        <div class="chat-box" id="chat-box">
-            <!-- I messaggi appariranno qui -->
-        </div>
-        <div class="message-input">
-            <input type="text" id="message" placeholder="Scrivi qui..." />
-            <button onclick="sendMessage()" class="send-button">📤</button>
-            <button onclick="sendAudio()" class="audio-button">🎤</button>
+
+        <div class="buttons-container2">
+            <button class="settings-button" onclick="optionOne()">Opzione 1</button>
+            <button class="settings-button" onclick="optionTwo()">Opzione 2</button>
+            <button class="settings-button" onclick="optionThree()">Opzione 3</button>
         </div>
     </div>
-
-    <!-- Menu espandibile -->
-<div id="menu" class="menu">
-    <div class="menu-item" onclick="openHeatmapCalendar()">Heatmap Calendar</div>
-    <div class="menu-item" onclick="openBackup()">Backup</div>
 </div>
+
+
 
     <script src="script.js"></script>
 </body>
