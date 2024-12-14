@@ -3,7 +3,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #333333;
+    background-color: #1c1c1c;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -22,77 +22,31 @@ body {
     flex-direction: column;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     overflow: hidden; /* Evita lo scroll all'esterno */
+    position: relative;     /* Assicurati che la home page sia sopra */
 }
 
 .header {
-    display: flex;
     text-align: center;
-    padding: 20px;
+    padding: 15px;
+    font-size: 20px;
+    color: #ffffff;
+    background-color: #1c1c1c;
     border-bottom: 1px solid #333;
     border-radius: 15px 15px 0 0;
     overflow: hidden; /* Impedisce lo scroll fuori dall'app */
-    justify-content: space-between;
 }
-
-.titolo{
-    font-size: 24px;
-    color: #EC404F;
-}
-
-/* Pulsante del menu */
-.menu-button {
-    position: absolute;
-    right: 15px;
-    background-color: transparent;
-    border: none;
-    font-size: 21px;
-    color: #fff;
-    cursor: pointer;
-    margin-top: 18px;
-}
-
-/* Menu */
-.menu {
-    position: fixed;
-    width: 50%;
-    height: 100%;
-    background-color: #1c1c1c;
-    color: white;
-    display: none;
-    flex-direction: column;
-    padding: 20px;
-    box-shadow: -4px 0 10px rgba(0, 0, 0, 0.5);
-}
-
-.menu-item {
-    font-size: 20px;
-    padding: 10px;
-    cursor: pointer;
-    margin-bottom: 20px;
-    transition: background-color 0.2s;
-}
-
-.menu-item:hover {
-    background-color: #333;
-}
-
-/* Opacità della home page quando il menu è aperto */
-.menu-active .home-page {
-    opacity: 0.5;
-}
-
 
 .search-bar {
     padding: 10px;
-    width: 340px;
+    width: 100%;
     background-color: #1c1c1c;
     overflow: hidden; /* Impedisce lo scroll fuori dall'app */
 }
 
 .search-bar input {
-    width: 100%;
+    width: 90%;
     padding: 10px;
-    border-radius: 20px;
+    border-radius: 13px;
     border: none;
     background-color: #333;
     color: #ffffff;
@@ -157,6 +111,7 @@ body {
 
 .contact.swiped .contact-delete {
     right: 15px;
+    top: 10%;
 }
 
 .create-chat-button {
@@ -286,3 +241,203 @@ body {
     font-size: 16px;
     cursor: pointer;
 }
+
+
+
+
+.settings-page {
+    width: 100%;
+    height: 100%;
+    max-width: 380px;
+    background-color: #1c1c1c;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+.settings-header {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background-color: #121212;
+    border-bottom: 1px solid #333;
+    border-radius: 15px 15px 0 0;
+}
+
+.settings-header h2 {
+    flex: 1;
+    text-align: center;
+    font-size: 18px;
+    margin: 0;
+    color: #ffffff;
+}
+
+.settings-content{
+    height: 700px;
+    padding-top: 20px;
+}
+
+.white-square {
+    background-color: #ffffff;
+    width: 320px;
+    height: 320px;
+    margin: 20px auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.buttons-container1 {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: space-evenly;
+    margin-top: 30px;
+}
+
+.buttons-container2 {
+    display: flex;
+    flex-direction: column;
+    width: 115px;
+    gap: 10px;
+    margin-top: 50px;
+    margin-left: 30px;
+}
+
+.settings-button {
+    background-color: #333;
+    color: #ffffff;
+    font-size: 16px;
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.settings-button:hover {
+    background-color: #ec404f;
+    transform: scale(1.05);
+}
+
+.settings-button:active {
+    transform: scale(0.95);
+}
+
+/* Stili per la pagina destra (menu) */
+.right-page {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 190px;
+    width: 70%;
+    height: 100%;
+    background-color: #333333; /* Colore di sfondo del menu */
+    color: white; /* Colore del testo all'interno del menu */
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+    transform: translateX(100%); /* Inizialmente nascosta */
+    transition: transform 0.3s ease;
+    display: none; /* Rende la pagina del menu invisibile all'inizio */
+    pointer-events: auto;   /* Permette l'interazione con il menu */
+    border-radius: 25px;
+    z-index: 2;
+}
+
+#right-page-content {
+    padding: 20px;
+}
+
+
+
+
+
+
+
+.home-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.menu-overlay {
+    flex: 1;
+    background-color: rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+}
+
+.menu-content {
+    width: 50%;
+    max-width: 250px;
+    height: 100%;
+    background-color: #1c1c1c;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    box-shadow: -4px 0 10px rgba(0, 0, 0, 0.3);
+
+}
+
+.menu-content .close-menu {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+.menu-content .menu-items {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    color: white;
+    font-size: 16px;
+    padding: 20px;
+}
+.menu-icon {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+}
+
+/* Nascondi l'icona del menu quando il menu è aperto */
+.menu-icon.hidden {
+    display: none;
+}
+
+/* Overlay per rendere la home page meno visibile quando il menu è aperto */
+.home-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Sfondo semi-trasparente */
+    z-index: 1; /* Deve essere sotto il menu */
+    display: none;
+    transition: transform 1s ease;
+}
+
+/* Aggiungi opacità alla home page */
+.home-page.blur {
+    opacity: 1; /* Riduce l'opacità della Home Page */
+    pointer-events: none; /* Impedisce interazioni con la home page mentre il menu è aperto */
+    transition: transform 1s ease;
+}
+
+
+.contact.dragging {
+    opacity: 0.5;
+    background-color: #f0f0f0;
+    cursor: move;
+}
+
