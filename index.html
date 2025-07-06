@@ -1,1 +1,520 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#2196f3" />
+<title>Calcetto Cambi - Sequenza Timer</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+  /* Reset base */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #f5f7fa;
+    margin: 0; padding: 0;
+    display: flex; flex-direction: column; min-height: 100vh;
+    color: #212121;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  header {
+    background: #2196f3;
+    color: white;
+    text-align: center;
+    padding: 1.5rem 1rem;
+    font-weight: 700;
+    font-size: 1.8rem;
+    user-select: none;
+    box-shadow: 0 2px 4px rgb(33 150 243 / 0.5);
+  }
+  main {
+    flex-grow: 1;
+    max-width: 480px;
+    margin: 1rem auto 1.5rem;
+    padding: 0 1rem 2rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .timer {
+    font-size: 3.2rem;
+    font-weight: 700;
+    color: #2196f3;
+    text-align: center;
+    user-select: none;
+  }
+  .timer-desc {
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: #444;
+    margin-top: -0.5rem;
+    text-align: center;
+    user-select: none;
+  }
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }
+  button {
+    cursor: pointer;
+    background: #2196f3;
+    border: none;
+    color: white;
+    padding: 1rem 1.8rem;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1.25rem;
+    transition: background-color 0.25s ease;
+    user-select: none;
+    min-width: 120px;
+    box-shadow: 0 4px 8px rgb(33 150 243 / 0.3);
+    touch-action: manipulation;
+  }
+  button:disabled {
+    background: #90caf9;
+    cursor: default;
+    box-shadow: none;
+  }
+  button:hover:not(:disabled),
+  button:focus-visible:not(:disabled) {
+    background: #1769aa;
+    outline: none;
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 320px;
+    overflow-y: auto;
+    border: 1.5px solid #ccc;
+    border-radius: 10px;
+    background: white;
+  }
+  li {
+    padding: 1rem 1rem;
+    border-bottom: 1px solid #eee;
+    font-size: 1.3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+  }
+  li.done {
+    text-decoration: line-through;
+    color: #999;
+  }
+  li.active {
+    font-weight: 700;
+    color: #4caf50;
+    background: #e8f5e9;
+  }
+  .delete-btn {
+    background: #f44336;
+    padding: 0.5rem 0.9rem;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1;
+    user-select: none;
+    transition: background-color 0.25s ease;
+    box-shadow: 0 2px 5px rgb(244 67 54 / 0.4);
+  }
+  .delete-btn:hover,
+  .delete-btn:focus-visible {
+    background: #ba000d;
+    outline: none;
+  }
+  .reset-all {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+  }
+  .reset-all button {
+    background: #ff9800;
+    padding: 1rem 2rem;
+    font-size: 1.3rem;
+    box-shadow: 0 4px 8px rgb(255 152 0 / 0.4);
+    border-radius: 10px;
+  }
+  .reset-all button:hover,
+  .reset-all button:focus-visible {
+    background: #ef6c00;
+    outline: none;
+  }
 
+  /* MODAL FORM */
+  #modal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.4);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 1rem;
+  }
+  #modal.active {
+    display: flex;
+  }
+  #modal form {
+    background: white;
+    padding: 1.8rem 2rem;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+  #modal form h2 {
+    margin: 0 0 1rem 0;
+    font-weight: 700;
+    font-size: 1.8rem;
+    text-align: center;
+    user-select: none;
+  }
+  #modal form label {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #212121;
+  }
+  #modal form input[type="text"],
+  #modal form input[type="number"] {
+    padding: 0.9rem 1rem;
+    font-size: 1.2rem;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.25s ease;
+  }
+  #modal form input[type="text"]:focus,
+  #modal form input[type="number"]:focus {
+    border-color: #2196f3;
+    outline: none;
+  }
+  #modal form input[type="number"]::-webkit-inner-spin-button, 
+  #modal form input[type="number"]::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
+  }
+  #modal form button {
+    background: #2196f3;
+    border: none;
+    color: white;
+    padding: 1rem;
+    font-weight: 700;
+    font-size: 1.3rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+    user-select: none;
+  }
+  #modal form button:hover,
+  #modal form button:focus-visible {
+    background: #1769aa;
+    outline: none;
+  }
+  #modal form .btn-cancel {
+    background: #f44336;
+  }
+  #modal form .btn-cancel:hover,
+  #modal form .btn-cancel:focus-visible {
+    background: #ba000d;
+    outline: none;
+  }
+</style>
+</head>
+<body>
+
+<header>Calcetto Cambi - Timer Sequenza</header>
+
+<main>
+  <div class="timer" id="timer">--:--</div>
+  <div class="timer-desc" id="timerDesc">Nessun cambio attivo</div>
+
+  <div class="controls">
+    <button id="newChangeBtn" aria-label="Aggiungi nuovo cambio">Nuovo Cambio</button>
+    <button id="startSeqBtn" disabled aria-label="Avvia sequenza cambi">Avvia sequenza</button>
+    <button id="stopBtn" disabled aria-label="Ferma timer">Stop</button>
+    <button id="resetBtn" disabled aria-label="Resetta timer e sequenza">Reset</button>
+  </div>
+
+  <section aria-label="Lista cambi">
+    <ul id="changeList" role="list"></ul>
+  </section>
+
+  <section class="reset-all">
+    <button id="clearAllBtn" aria-label="Pulisci tutta la lista cambi e resetta timer">Pulisci tutto</button>
+  </section>
+</main>
+
+<!-- MODAL FORM -->
+<div id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDesc">
+  <form id="changeForm">
+    <h2 id="modalTitle">Nuovo Cambio</h2>
+    <label for="outPlayer">Chi esce?</label>
+    <input type="text" id="outPlayer" name="outPlayer" required autocomplete="off" placeholder="Nome giocatore che esce" />
+    <label for="inPlayer">Chi entra?</label>
+    <input type="text" id="inPlayer" name="inPlayer" required autocomplete="off" placeholder="Nome giocatore che entra" />
+    <label for="minutesCountdown">Tra quanti minuti?</label>
+    <input type="number" id="minutesCountdown" name="minutesCountdown" min="1" max="59" required placeholder="Minuti" />
+    <div style="display:flex; justify-content: flex-end; gap: 1rem; margin-top: 1rem;">
+      <button type="button" class="btn-cancel">Annulla</button>
+      <button type="submit">Aggiungi Cambio</button>
+    </div>
+  </form>
+</div>
+
+<script>
+  const timerDisplay = document.getElementById('timer');
+  const timerDesc = document.getElementById('timerDesc');
+  const newChangeBtn = document.getElementById('newChangeBtn');
+  const startSeqBtn = document.getElementById('startSeqBtn');
+  const stopBtn = document.getElementById('stopBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const clearAllBtn = document.getElementById('clearAllBtn');
+  const changeList = document.getElementById('changeList');
+
+  // Modal elements
+  const modal = document.getElementById('modal');
+  const changeForm = document.getElementById('changeForm');
+  const outPlayerInput = document.getElementById('outPlayer');
+  const inPlayerInput = document.getElementById('inPlayer');
+  const minutesCountdownInput = document.getElementById('minutesCountdown');
+  const btnCancel = changeForm.querySelector('.btn-cancel');
+
+  let changes = []; // {out, in, time, done}
+  let currentIndex = null; // indice cambio attivo
+  let timeLeft = 0; // secondi rimanenti
+  let timer = null;
+  let running = false;
+
+  // Salva stato su localStorage
+  function saveState(){
+    localStorage.setItem('calcetto_changes', JSON.stringify(changes));
+    localStorage.setItem('calcetto_currentIndex', currentIndex);
+    localStorage.setItem('calcetto_timeLeft', timeLeft);
+    localStorage.setItem('calcetto_running', running);
+  }
+
+  // Carica stato da localStorage
+  function loadState(){
+    const storedChanges = localStorage.getItem('calcetto_changes');
+    const storedIndex = localStorage.getItem('calcetto_currentIndex');
+    const storedTimeLeft = localStorage.getItem('calcetto_timeLeft');
+    const storedRunning = localStorage.getItem('calcetto_running');
+
+    changes = storedChanges ? JSON.parse(storedChanges) : [];
+    currentIndex = storedIndex !== null && storedIndex !== "null" ? Number(storedIndex) : null;
+    timeLeft = storedTimeLeft !== null ? Number(storedTimeLeft) : 0;
+    running = storedRunning === "true";
+
+    renderChanges();
+    updateTimerDisplay();
+    updateTimerDesc();
+    updateButtons();
+
+    if(running) startTimer();
+  }
+
+  // Render lista cambi
+  function renderChanges(){
+    changeList.innerHTML = '';
+    changes.forEach((c, i) => {
+      const li = document.createElement('li');
+      li.textContent = `${c.out} → ${c.in} (in ${c.time} min)`;
+      if(c.done) li.classList.add('done');
+      if(i === currentIndex) li.classList.add('active');
+
+      // Bottone elimina singolo cambio
+      const delBtn = document.createElement('button');
+      delBtn.textContent = 'X';
+      delBtn.className = 'delete-btn';
+      delBtn.setAttribute('aria-label', `Elimina cambio ${c.out} → ${c.in}`);
+      delBtn.onclick = e => {
+        e.stopPropagation();
+        if(running && i === currentIndex){
+          alert('Non puoi cancellare il cambio in corso!');
+          return;
+        }
+        changes.splice(i,1);
+        if(currentIndex !== null && i < currentIndex){
+          currentIndex--;
+        } else if(i === currentIndex){
+          currentIndex = null;
+          stopTimer();
+          resetTimer();
+        }
+        renderChanges();
+        saveState();
+        updateButtons();
+      };
+
+      li.appendChild(delBtn);
+      changeList.appendChild(li);
+    });
+  }
+
+  // Aggiorna display timer (mm:ss)
+  function updateTimerDisplay(){
+    const mins = Math.floor(timeLeft / 60);
+    const secs = timeLeft % 60;
+    timerDisplay.textContent = `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+  }
+
+  // Aggiorna descrizione timer
+  function updateTimerDesc(){
+    if(currentIndex === null || !changes[currentIndex]){
+      timerDesc.textContent = 'Nessun cambio attivo';
+      return;
+    }
+    if(changes[currentIndex].done){
+      timerDesc.textContent = `Cambio fatto: ${changes[currentIndex].out} → ${changes[currentIndex].in}`;
+    } else {
+      timerDesc.textContent = `Prossimo cambio: ${changes[currentIndex].out} → ${changes[currentIndex].in}`;
+    }
+  }
+
+  // Avvia timer countdown
+  function startTimer(){
+    if(running) return;
+    if(currentIndex === null) return;
+    if(timeLeft <= 0) return;
+
+    running = true;
+    updateButtons();
+
+    timer = setInterval(() => {
+      timeLeft--;
+      updateTimerDisplay();
+      if(timeLeft <= 0){
+        clearInterval(timer);
+        changes[currentIndex].done = true;
+        saveState();
+        currentIndex++;
+        if(currentIndex >= changes.length){
+          currentIndex = null;
+          running = false;
+          updateButtons();
+          updateTimerDesc();
+          alert('Sequenza cambi terminata!');
+        } else {
+          timeLeft = changes[currentIndex].time * 60;
+          updateTimerDesc();
+          updateTimerDisplay();
+          saveState();
+        }
+      }
+    }, 1000);
+  }
+
+  // Ferma timer
+  function stopTimer(){
+    if(!running) return;
+    clearInterval(timer);
+    running = false;
+    updateButtons();
+  }
+
+  // Reset timer e sequenza
+  function resetTimer(){
+    stopTimer();
+    changes.forEach(c => c.done = false);
+    currentIndex = null;
+    timeLeft = 0;
+    updateTimerDisplay();
+    updateTimerDesc();
+    renderChanges();
+    saveState();
+    updateButtons();
+  }
+
+  // Avvia sequenza dal primo cambio non fatto
+  function startSequence(){
+    if(running) return;
+    const nextIndex = changes.findIndex(c => !c.done);
+    if(nextIndex === -1){
+      alert('Tutti i cambi sono già stati completati. Resetta la sequenza per ricominciare.');
+      return;
+    }
+    currentIndex = nextIndex;
+    timeLeft = changes[currentIndex].time * 60;
+    updateTimerDesc();
+    updateTimerDisplay();
+    renderChanges();
+    saveState();
+    startTimer();
+  }
+
+  // Apertura e chiusura modal
+  function openModal(){
+    modal.classList.add('active');
+    outPlayerInput.value = '';
+    inPlayerInput.value = '';
+    minutesCountdownInput.value = '';
+    outPlayerInput.focus();
+  }
+  function closeModal(){
+    modal.classList.remove('active');
+  }
+
+  // Aggiorna stato bottoni
+  function updateButtons(){
+    startSeqBtn.disabled = running || changes.length === 0 || changes.every(c => c.done);
+    stopBtn.disabled = !running;
+    resetBtn.disabled = running && currentIndex === null;
+    resetBtn.disabled = false;
+  }
+
+  // Eventi
+  newChangeBtn.addEventListener('click', openModal);
+  btnCancel.addEventListener('click', closeModal);
+
+  changeForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const outP = outPlayerInput.value.trim();
+    const inP = inPlayerInput.value.trim();
+    const mins = parseInt(minutesCountdownInput.value, 10);
+    if(!outP || !inP || isNaN(mins) || mins < 1){
+      alert('Compila tutti i campi correttamente.');
+      return;
+    }
+    changes.push({out: outP, in: inP, time: mins, done: false});
+    renderChanges();
+    saveState();
+    closeModal();
+    updateButtons();
+  });
+
+  startSeqBtn.addEventListener('click', startSequence);
+  stopBtn.addEventListener('click', stopTimer);
+  resetBtn.addEventListener('click', resetTimer);
+
+  clearAllBtn.addEventListener('click', () => {
+    if(confirm('Sei sicuro di voler cancellare tutti i cambi e resettare il timer?')){
+      changes = [];
+      currentIndex = null;
+      timeLeft = 0;
+      running = false;
+      renderChanges();
+      updateTimerDisplay();
+      updateTimerDesc();
+      updateButtons();
+      saveState();
+    }
+  });
+
+  window.addEventListener('load', loadState);
+</script>
+
+</body>
+</html>

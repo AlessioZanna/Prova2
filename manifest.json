@@ -1,11 +1,10 @@
 {
-  "name": "Music Notes",
-  "short_name": "MusicNotes",
-  "description": "Una PWA per creare note vocali e testi musicali.",
-  "start_url": "index.html",
+  "name": "Calcetto Cambi",
+  "short_name": "CambiCalcetto",
+  "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#1c1c1c",
-  "theme_color": "#ec404f",
+  "background_color": "#f5f7fa",
+  "theme_color": "#2196f3",
   "icons": [
     {
       "src": "icon-192.png",
