@@ -73,13 +73,14 @@ function renderChanges(){
     const outNames = Array.isArray(c.out) ? c.out.join(', ') : c.out;
     const inNames = Array.isArray(c.in) ? c.in.join(', ') : c.in;
     const li = document.createElement('li');
-    li.textContent = `${outNames} → ${inNames} (in ${c.time} min)`;
+    li.textContent = `Esce ${outNames} - Entra ${inNames} - ${c.time}m`;
     if(c.done) li.classList.add('done');
     if(i === currentIndex) li.classList.add('active');
-    const delBtn = document.createElement('button');
-    delBtn.textContent = 'X';
-    delBtn.className = 'delete-btn';
-    delBtn.setAttribute('aria-label', `Elimina cambio ${outNames} → ${inNames}`);
+const delBtn = document.createElement('button');
+delBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+delBtn.className = 'delete-btn';
+delBtn.setAttribute('aria-label', `Elimina cambio ${outNames} → ${inNames}`);
+
     delBtn.onclick = e => {
       e.stopPropagation();
       if(running && i === currentIndex){

@@ -1,12 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
 :root {
-  --primary: #2196f3;
-  --primary-dark: #1769aa;
-  --danger: #f44336;
-  --danger-dark: #ba000d;
-  --accent: #ff9800;
-  --accent-dark: #ef6c00;
-  --bg: #232428;
+  --primary: #fb2d39;
+  --danger: #fb2d39;
+  --danger-dark: #fb2d39;
+  --bg: #191b1e;
   --white: #fff;
   --radius: 10px;
   --shadow: 0 4px 8px rgb(33 150 243 / 0.15);
@@ -23,14 +20,14 @@ body {
 
 }
 header {
-  background: var(--primary);
-  color: #232428;
+/*   background: var(--primary); */
+  color: white;
   text-align: center;
   padding: 1.5rem 1rem;
   font-weight: 700;
   font-size: 1.8rem;
   user-select: none;
-  box-shadow: 0 2px 4px rgb(33 150 243 / 0.2);
+/*   box-shadow: 0 2px 4px rgb(33 150 243 / 0.2); */
   height: 50px;
   line-height: 5px; /* stessa altezza dell'header */
 
@@ -49,7 +46,7 @@ main {
 .timer {
   font-size: 3.2rem;
   font-weight: 700;
-  color: var(--primary);
+  color: white;
   text-align: center;
   user-select: none;
 }
@@ -80,15 +77,17 @@ button {
   user-select: none;
   box-shadow: var(--shadow);
   touch-action: manipulation;
+    border-radius: 15px;
 }
 button:disabled {
-  background: #90caf9;
+  background: #ff777e;
   cursor: default;
   box-shadow: none;
+  border-radius: 15px;
 }
 button:hover:not(:disabled),
 button:focus-visible:not(:disabled) {
-  background: var(--primary-dark);
+  background: #fb2d39;
   outline: none;
 }
 ul {
@@ -100,43 +99,53 @@ ul {
 .scrollable-area {
   max-height: 250px; /* oppure 320px, scegli tu */
   overflow-y: auto;
-  border: 1.5px solid #ccc;
+/*   border: 1.5px solid #ccc; */
   border-radius: var(--radius);
-  background: var(--white);
+  background: none;
+  /* padding-bottom: 10px; */
 }
 li {
   padding: 1rem 1rem;
-  border-bottom: 1px solid #eee;
+/*   border-bottom: 1px solid #eee; */
+  background-color: #fb2d39;
   font-size: 1.1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   user-select: none;
+  border-radius: 15px;
+  color: white;
+  font-weight: 700;
+  margin-bottom: 7px;
 }
 li.done {
   text-decoration: line-through;
-  color: #999;
+  color: white;
+  font-weight: 700;
 }
 li.active {
   font-weight: 700;
-  color: #ffffff;
-  background: #90caf9;
+  color: white;
+  background: #fb2d39;
 }
 
 .delete-btn {
-  background: #2196f3;
+/*   background: #2196f3; */
+  background: none;
+  outline: none;
   padding: 0.5rem 0.9rem;
   border-radius: 6px;
   font-weight: 700;
   font-size: 1rem;
   line-height: 1;
   user-select: none;
-  transition: background-color 0.2s;
-  box-shadow: 0 2px 5px rgb(244 67 54 / 0.2);
+  box-shadow: none;
+/*   transition: background-color 0.2s; */
+/*   box-shadow: 0 2px 5px rgb(244 67 54 / 0.2); */
 }
 .delete-btn:hover,
 .delete-btn:focus-visible {
-  background: var(--danger-dark);
+  background: none;
   outline: none;
 }
 .reset-all {
@@ -264,15 +273,15 @@ body.modal-open main {
   transition: border-color 0.2s;
 }
 #searchInput:focus {
-  border-color: #1769aa;
+  border-color: #fb2d39;
 }
 .inline-form {
   display: flex;
   flex-wrap: wrap;
   gap: 25px 70px;
   align-items: center;
-  background-color: #fff;
-  border-radius: 15px;
+  background-color: #fb2d39;
+  border-radius: 25px;
   padding: 20px;
   margin: 5px;
 }
@@ -284,8 +293,9 @@ body.modal-open main {
   margin-top: 0.5rem;
 }
 .inline-form label {
-  font-weight: 600;
-  font-size: 1rem;
+  font-weight: 1000;
+  font-size: 17px;
+  color: white;
 }
 .inline-form input[type="text"],
 .inline-form input[type="number"] {
@@ -302,8 +312,8 @@ body.modal-open main {
   outline: none;
 }
 .inline-form button[type="submit"] {
-  background: #2196f3;
-  color: #fff;
+  background: white;
+  color: #fb2d39;
   border: none;
   padding: 0.7rem 1.2rem;
   border-radius: 8px;
@@ -314,16 +324,18 @@ body.modal-open main {
 }
 .inline-form button[type="submit"]:hover,
 .inline-form button[type="submit"]:focus-visible {
-  background: #1769aa;
+  background: white;
 }
 .inline-form select {
   padding: 0.6rem 1rem;
   font-size: 1rem;
-  border: 1px solid #2196f3;
+/*   border: 1px solid #2196f3; */
   border-radius: 8px;
   width: 160px;
   transition: border-color 0.2s;
   background: #fff;
+  color: #fb2d39;
+  font-weight: 700;
 }
 .inline-form select:focus {
   border-color: #2196f3;

@@ -3,8 +3,8 @@
   "short_name": "NextUp",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#191b1e",
-  "theme_color": "#191b1e",
+  "background_color": "#f5f7fa",
+  "theme_color": "#f5f7fa",
   "icons": [
     {
       "src": "icon-192.png",
